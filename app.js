@@ -1,9 +1,10 @@
+// Commentaires
 // IMPORTS DEPANDENCIES
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
 
-
+// Commentaires
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
