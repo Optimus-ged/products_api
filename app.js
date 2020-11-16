@@ -8,6 +8,8 @@ const app = express();
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
 
+
+// MIDDLEWARE
 app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
