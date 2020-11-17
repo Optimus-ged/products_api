@@ -2,7 +2,9 @@
 // IMPORTS DEPANDENCIES
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const app = express();
+
 
 // Commentaires
 // IMPORTS ROUTES
@@ -10,6 +12,8 @@ const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
 
 // MIDDLEWARE
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);

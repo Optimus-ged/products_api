@@ -19,8 +19,14 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const product = {
+        name: req.body.name,
+        price: req.body.price
+    }
     res.status(201).json({
-        message: 'Handling a post request'
+        status: "201",
+        message: 'Handling a post request',
+        product: product
     });
 });
 
