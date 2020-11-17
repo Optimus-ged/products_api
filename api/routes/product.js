@@ -24,7 +24,7 @@ router.post('/', (req, res, next) => {
         price: req.body.price
     }
     res.status(201).json({
-        status: "201",
+        status: '201',
         message: 'Handling a post request',
         product: product
     });
