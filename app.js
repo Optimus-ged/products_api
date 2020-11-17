@@ -1,8 +1,8 @@
 // Commentaires
 // IMPORTS DEPANDENCIES
 const express = require('express');
-const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const app = express();
 
 
@@ -10,13 +10,26 @@ const app = express();
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
-
+const bodyParser = require('body-parser');
 // MIDDLEWARE
-app.use(bodyParser.urlencoded({extended : false}));
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
+
+// Allow Access Control
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'PUT, PATCH, POST, DELETE, GET');
+        res.status(200).json({});
+    }
+    next();
+});
 
 
 // GESTION DES ERREURS
