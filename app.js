@@ -10,7 +10,6 @@ const app = express();
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
-
 // MIDDLEWARE
 
 
