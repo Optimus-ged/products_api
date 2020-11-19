@@ -12,10 +12,10 @@ router.get('/:id', (req, res, next) => {
     const id = req.params.id;
     if (id === 'special') return res.status(200).json({
         message: 'success',
-        'id': req.params.id
+        id: req.params.id
     });
 
-    res.status(200).json(res.status(200).json(id));
+    res.status(200).json(res.status(200).json({ id: id }));
 });
 
 router.post('/', (req, res, next) => {

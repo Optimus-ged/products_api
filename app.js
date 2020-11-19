@@ -10,9 +10,8 @@ const app = express();
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
+
 // MIDDLEWARE
-
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -30,7 +29,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // GESTION DES ERREURS
 app.use((req, res, next) => {
     const error = new Error('THE REQUEST WAS NOT FOUND ON THE SERVER');
@@ -47,5 +45,8 @@ app.use((error, req, res, next) => {
     });
 });
 
+const port = 3000;
+app.listen(port, () => console.log(`THE SERVER IS RUNNING AT PORT ${port}`));
+
 // EXPORTS
-module.exports = app;
+// module.exports = app;
