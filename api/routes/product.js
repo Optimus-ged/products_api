@@ -93,34 +93,38 @@ router.delete('/:id', (req, res, next) => {
 // Comment
 // Handling patch-request
 router.patch('/:id', (req, res, next) => {
-    const id = req.params.id;
+    let id = req.params.id;
     const updateOps = {};
     for (const ops of req.body) {
-        updateOps[ops.opsName] = ops.value
+        updateOps[ops.opsName] = ops.value;
     }
     Product.updateOne({ _id: id }, { $set: updateOps })
         .exec()
         .then(
             result => {
-                if (result)
-                    return res.status(200).json({
-                        status: 200,
-                        message: "Successfully updated"
-                    })
-
-                res.status(404).json({
-                    status: 404,
-                    message: "Product not found"
+                console.log(result);
+                if (!result)
+                    return res.status(404).json({
+                        status: 404,
+                        error: {
+                            message: "Product not found"
+                        }
+                    });
+                res.status(200).json({
+                    status: 200,
+                    message: "Product successfully updated"
                 });
             }
         )
         .catch(
             err => {
-                console.log(err)
+                console.log(err);
                 res.status(500).json({
                     status: 500,
-                    message: err
-                })
+                    error: {
+                        message: error.message
+                    }
+                });
             }
         )
 });
