@@ -1,12 +1,20 @@
-// Commentaires
+// Comment
 // IMPORTS DEPANDENCIES
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
+const mongoose = require('mongoose');
 
 
-// Commentaires
+
+// Comment
+// Connection to Db
+mongoose.connect('mongodb+srv://optimus:' + process.env.MONGO_ATLAS_PWD + '@cluster0.hefqw.mongodb.net/productsDb?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true }
+);
+
+// Comment
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
@@ -45,7 +53,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`THE SERVER IS RUNNING AT PORT ${port}`));
 
 // EXPORTS
