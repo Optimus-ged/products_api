@@ -19,7 +19,7 @@ router.get('/', (req, res, next) => {
                 res.status(500).json({
                     status: 500,
                     error: {
-                        message: error.message
+                        message: err.message
                     }
                 });
             }
@@ -84,7 +84,7 @@ router.post('/', (req, res, next) => {
                 res.status(500).json({
                     status: 500,
                     error: {
-                        message: error.message
+                        message: err.message
                     }
                 });
             }
@@ -116,7 +116,7 @@ router.delete('/:id', (req, res, next) => {
                 res.status(500).json({
                     status: 500,
                     error: {
-                        message: error.message
+                        message: err.message
                     }
                 });
             }
