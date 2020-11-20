@@ -13,17 +13,17 @@ router.get('/', (req, res, next) => {
         })
     }
     )
-    .catch(
-        err => {
-            console.log(err);
-            res.status(500).json({
-                status: 500,
-                error: {
-                    message: error.message
-                }
-            });
-        }
-    )
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({
+                    status: 500,
+                    error: {
+                        message: error.message
+                    }
+                });
+            }
+        )
 });
 
 
@@ -46,17 +46,17 @@ router.get('/:id', (req, res) => {
 
     }
     )
-    .catch(
-        err => {
-            console.log(err);
-            res.status(500).json({
-                status: 500,
-                error: {
-                    message: error.message
-                }
-            });
-        }
-    )
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({
+                    status: 500,
+                    error: {
+                        message: error.message
+                    }
+                });
+            }
+        )
 });
 
 
@@ -75,17 +75,17 @@ router.post('/', (req, res, next) => {
             createdProduct: product
         });
     })
-    .catch(
-        err => {
-            console.log(err);
-            res.status(500).json({
-                status: 500,
-                error: {
-                    message: error.message
-                }
-            });
-        }
-    )
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({
+                    status: 500,
+                    error: {
+                        message: error.message
+                    }
+                });
+            }
+        )
 
 
 });
@@ -123,11 +123,11 @@ router.delete('/:id', (req, res, next) => {
 
 // Comment
 // Handling patch-request
-router.patch('/:id', (req, res, next) => {
+router.patch('/:id', (req, res) => {
     let id = req.params.id;
     const updateOps = {};
     for (const ops of req.body) {
-        updateOps[ops.opsName] = ops.value;
+        updateOps[ops.OpsKey] = ops.value;
     }
     Product.updateOne({ _id: id }, { $set: updateOps })
         .exec()
@@ -140,10 +140,11 @@ router.patch('/:id', (req, res, next) => {
                         error: {
                             message: "Product not found"
                         }
-                    });
+                    })
                 res.status(200).json({
                     status: 200,
-                    message: "Product successfully updated"
+                    message: "Product Success Updated",
+
                 });
             }
         )
@@ -153,11 +154,10 @@ router.patch('/:id', (req, res, next) => {
                 res.status(500).json({
                     status: 500,
                     error: {
-                        message: error.message
+                        message: err.message
                     }
                 });
-            }
-        )
+            })
 });
 
 // Comment
