@@ -12,10 +12,15 @@ router.get('/', (req, res, next) => {
             products: data
         })
     }
-    ).catch(err => res.status(500).json({
-        status: 500,
-        message: err.message
-    }))
+    ).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            status: 500,
+            error: {
+                message: error.message
+            }
+        });
+    })
 });
 
 
@@ -37,10 +42,15 @@ router.get('/:id', (req, res) => {
         })
 
     }
-    ).catch(err => res.status(500).json({
-        status: 500,
-        message: err.message
-    }))
+    ).catch( err => {
+        console.log(err);
+        res.status(500).json({
+            status: 500,
+            error: {
+                message: error.message
+            }
+        });
+    })
 });
 
 
@@ -58,7 +68,15 @@ router.post('/', (req, res, next) => {
             message: 'Handling a post request',
             createdProduct: product
         });
-    }).catch(err => console.log(err.message));
+    }).catch( err => {
+        console.log(err);
+        res.status(500).json({
+            status: 500,
+            error: {
+                message: error.message
+            }
+        });
+    });
 
 
 });
@@ -80,12 +98,15 @@ router.delete('/:id', (req, res, next) => {
             }
         })
     }).catch(err => {
-        res.status(500).json({
-            status: 500,
-            error: {
-                message: err.message
-            }
-        })
+        err => {
+            console.log(err);
+            res.status(500).json({
+                status: 500,
+                error: {
+                    message: error.message
+                }
+            });
+        }
     })
 });
 
