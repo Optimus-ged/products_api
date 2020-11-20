@@ -24,18 +24,18 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res) => {
     let id = req.params.id;
     Product.findById(id).exec().then(prod => {
-        if (prod) {
-            res.status(200).json({
+        if (prod)
+            return res.status(200).json({
                 status: 200,
                 message: "Success getted",
                 product: prod
             })
-        } else {
-            res.status(404).json({
-                status: 404,
-                message: "Product not found"
-            })
-        }
+
+        res.status(404).json({
+            status: 404,
+            message: "Product not found"
+        })
+
     }
     ).catch(err => res.status(500).json({
         status: 500,
@@ -63,16 +63,42 @@ router.post('/', (req, res, next) => {
 
 });
 
+
+// Comment
+// Handling delete-request
 router.delete('/:id', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling a delete method'
-    });
+    let id = req.params.id;
+    Product.remove({ _id: id }).exec().then(result => {
+        if (result)
+            return res.status(200).json({
+                status: 200,
+                message: "Successfully Deleted"
+            })
+        res.status(404).json({
+            error: {
+                message: "Invalid product Id"
+            }
+        })
+    }).catch(err => {
+        res.status(500).json({
+            status: 500,
+            error: {
+                message: err.message
+            }
+        })
+    })
 });
 
+
+// Comment
+// Handling patch-request
 router.patch('/:id', (req, res, next) => {
     res.status(200).json({
-        message: 'Handling a patch method'
+        message: 'Handling a patch request'
     });
 });
 
+
+//Comment
+//
 module.exports = router;
