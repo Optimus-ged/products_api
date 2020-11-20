@@ -10,15 +10,26 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:id', (req, res, next) => {
-    const id = req.params.id;
-    if (id === 'special') return res.status(200).json({
-        status: 200,
-        message: 'success',
-        id: req.params.id
-    });
-
-    res.status(200).json(res.status(200).json({ id: id }));
+router.get('/:id', (req, res) => {
+    let id = req.params.id;
+    Product.findById(id).exec().then(prod => {
+        if (prod) {
+            res.status(200).json({
+                status: 200,
+                message: "Success getted",
+                product: prod
+            })
+        } else {
+            res.status(404).json({
+                status: 404,
+                message: "Product not found"
+            })
+        }
+    }
+    ).catch(err => res.status(500).json({
+        status: 500,
+        message: err.message
+    }))
 });
 
 router.post('/', (req, res, next) => {
@@ -27,13 +38,15 @@ router.post('/', (req, res, next) => {
         name: req.body.name,
         price: req.body.price
     });
-    product.save().then(result => console.log(result)).catch(err => console.log(err));
+    product.save().then(result => {
+        console.log(result); res.status(201).json({
+            status: 201,
+            message: 'Handling a post request',
+            createdProduct: product
+        });
+    }).catch(err => console.log(err.message));
 
-    res.status(201).json({
-        status: 201,
-        message: 'Handling a post request',
-        createdProduct: product
-    });
+
 });
 
 router.delete('/:id', (req, res, next) => {
