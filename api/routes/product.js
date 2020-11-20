@@ -3,13 +3,24 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/Product');
 
-
+// Comment
+// Handling get-request for all items
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling a get request'
-    });
+    Product.find().exec().then(data => {
+        res.status(200).json({
+            status: 200,
+            products: data
+        })
+    }
+    ).catch(err => res.status(500).json({
+        status: 500,
+        message: err.message
+    }))
 });
 
+
+// comment
+// Handling get-equest for one item
 router.get('/:id', (req, res) => {
     let id = req.params.id;
     Product.findById(id).exec().then(prod => {
@@ -32,6 +43,9 @@ router.get('/:id', (req, res) => {
     }))
 });
 
+
+// Comment
+// Handling post-request
 router.post('/', (req, res, next) => {
     const product = new Product({
         _id: mongoose.Types.ObjectId(),
