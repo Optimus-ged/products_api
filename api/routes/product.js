@@ -31,32 +31,35 @@ router.get('/', (req, res, next) => {
 // Handling get-equest for one item
 router.get('/:id', (req, res) => {
     let id = req.params.id;
-    Product.findById(id).exec().then(prod => {
-        if (prod)
-            return res.status(200).json({
-                status: 200,
-                message: "Success getted",
-                product: prod
+    Product.findById(id)
+        .exec()
+        .then(prod => {
+            if (prod)
+                return res.status(200).json({
+                    status: 200,
+                    message: "Success getted",
+                    product: prod
+                })
+
+            res.status(404).json({
+                status: 404,
+                message: "Product not found"
             })
 
-        res.status(404).json({
-            status: 404,
-            message: "Product not found"
-        })
-
-    }
-    )
+        }
+        )
         .catch(
             err => {
                 console.log(err);
                 res.status(500).json({
                     status: 500,
                     error: {
-                        message: error.message
+                        message: err.message
                     }
                 });
             }
         )
+
 });
 
 
@@ -133,7 +136,6 @@ router.patch('/:id', (req, res) => {
         .exec()
         .then(
             result => {
-                console.log(result);
                 if (!result)
                     return res.status(404).json({
                         status: 404,
@@ -144,7 +146,6 @@ router.patch('/:id', (req, res) => {
                 res.status(200).json({
                     status: 200,
                     message: "Product Success Updated",
-
                 });
             }
         )
