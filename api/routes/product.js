@@ -6,13 +6,17 @@ const Product = require('../models/Product');
 // Comment
 // Handling get-request for all items
 router.get('/', (req, res, next) => {
-    Product.find().exec().then(data => {
-        res.status(200).json({
-            status: 200,
-            products: data
+    Product.find()
+        .select("_id name price")
+        .exec()
+        .then(data => {
+            let dataLength = data.length
+            res.status(200).json({
+                status: 200,
+                Items: dataLength,
+                products: data
+            })
         })
-    }
-    )
         .catch(
             err => {
                 console.log(err);
@@ -26,12 +30,12 @@ router.get('/', (req, res, next) => {
         )
 });
 
-
 // comment
 // Handling get-equest for one item
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
     let id = req.params.id;
     Product.findById(id)
+        .select("_id name price")
         .exec()
         .then(prod => {
             if (prod)
@@ -46,8 +50,7 @@ router.get('/:id', (req, res) => {
                 message: "Product not found"
             })
 
-        }
-        )
+        })
         .catch(
             err => {
                 console.log(err);
@@ -71,13 +74,21 @@ router.post('/', (req, res, next) => {
         name: req.body.name,
         price: req.body.price
     });
-    product.save().then(result => {
-        console.log(result); res.status(201).json({
-            status: 201,
-            message: 'Handling a post request',
-            createdProduct: product
-        });
-    })
+    product
+        .save()
+        .then(
+            result => {
+                console.log(result);
+                res.status(200).json({
+                    status: 200,
+                    message: 'Handling a post request',
+                    createdProduct: {
+                        _id: result._id,
+                        name: result.name,
+                        price: result.price
+                    }
+                });
+            })
         .catch(
             err => {
                 console.log(err);
@@ -89,10 +100,7 @@ router.post('/', (req, res, next) => {
                 });
             }
         )
-
-
 });
-
 
 // Comment
 // Handling delete-request
@@ -123,7 +131,6 @@ router.delete('/:id', (req, res, next) => {
         )
 });
 
-
 // Comment
 // Handling patch-request
 router.patch('/:id', (req, res) => {
@@ -151,7 +158,6 @@ router.patch('/:id', (req, res) => {
         )
         .catch(
             err => {
-                console.log(err);
                 res.status(500).json({
                     status: 500,
                     error: {
