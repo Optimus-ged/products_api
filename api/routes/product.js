@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/Product');
 
-
 // Comment
 // Handling get-request for all items
 router.get('/', (req, res, next) => {
@@ -22,7 +21,7 @@ router.get('/', (req, res, next) => {
                             name: doc.name,
                             price: doc.price,
                             request: {
-                                type: "GET",
+                                type: "GET BY ID",
                                 url: "http://localhost:3000/products/" + doc._id
                             }
                         }
@@ -32,16 +31,11 @@ router.get('/', (req, res, next) => {
         })
         .catch(
             err => {
-                console.log(err);
-                res.status(500).json({
-                    status: 500,
-                    error: {
-                        message: err.message
-                    }
-                });
+                errorFunction(err, res);
             }
         )
 });
+
 
 // comment
 // Handling get-equest for one item
@@ -55,11 +49,17 @@ router.get('/:id', (req, res, next) => {
                 return res.status(200).json({
                     status: 200,
                     message: "Success getted",
-                    product: data,
-                    request: {
-                        type: "GET",
-                        url: "http://localhost:3000/products"
-                    }
+                    product: {
+                        id: data._id,
+                        name: data.name,
+                        price: data.price,
+                        request: {
+                            type: "GET",
+                            description: "Get all products",
+                            url: "http://localhost:3000/products"
+                        }
+                    },
+
                 })
             res.status(404).json({
                 status: 404,
@@ -69,18 +69,11 @@ router.get('/:id', (req, res, next) => {
         })
         .catch(
             err => {
-                console.log(err);
-                res.status(500).json({
-                    status: 500,
-                    error: {
-                        message: err.message
-                    }
-                });
+                errorFunction(err, res);
             }
         )
 
 });
-
 
 // Comment
 // Handling post-request
@@ -111,13 +104,7 @@ router.post('/', (req, res, next) => {
             })
         .catch(
             err => {
-                console.log(err);
-                res.status(500).json({
-                    status: 500,
-                    error: {
-                        message: err.message
-                    }
-                });
+                errorFunction(err, res);
             }
         )
 });
@@ -126,30 +113,31 @@ router.post('/', (req, res, next) => {
 // Handling delete-request
 router.delete('/:id', (req, res, next) => {
     let id = req.params.id;
-    Product.remove({ _id: id }).exec().then(result => {
-        res.status(200).json({
-            status: 200,
-            message: "Successfully Deleted",
-            result: result,
-            request: {
-                type: "Post-request",
-                url: "http://localhost:3000/products",
-                body: {
-                    name: "STRING",
-                    price: "NUMBER"
+    Product.deleteOne({ _id: id }).exec().then(
+        result => {
+            if (result.n != 0)
+                return res.status(200).json({
+                    status: 200,
+                    message: "Successfully Deleted",
+                    request: {
+                        type: "Post-request",
+                        url: "http://localhost:3000/products",
+                        body: {
+                            name: "STRING",
+                            price: "NUMBER"
+                        }
+                    }
+                })
+            res.status(404).json({
+                error: {
+                    status: 404,
+                    message: "Product not exist"
                 }
-            }
+            })
         })
-    })
         .catch(
             err => {
-                console.log(err);
-                res.status(500).json({
-                    status: 500,
-                    error: {
-                        message: err.message
-                    }
-                });
+                errorFunction(err, res);
             }
         )
 });
@@ -185,14 +173,21 @@ router.patch('/:id', (req, res) => {
         )
         .catch(
             err => {
-                res.status(500).json({
-                    status: 500,
-                    error: {
-                        message: err.message
-                    }
-                });
+                errorFunction(err, res);
             })
 });
+
+
+// Comment
+// Error for try catch
+function errorFunction(err, res) {
+    console.log(err);
+    res.status(500).json({
+        error: {
+            message: err.message
+        }
+    });
+}
 
 // Comment
 // Exporting module

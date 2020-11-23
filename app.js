@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://optimus:' + process.env.MONGO_ATLAS_PWD + '@cluster0.hefqw.mongodb.net/productsDb?retryWrites=true&w=majority',
     { useNewUrlParser: true, useUnifiedTopology: true }
 );
-
+mongoose.Promise = global.Promise;
 // Comment
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
