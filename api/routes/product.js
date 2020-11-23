@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/Product');
 
+
 // Comment
 // Handling get-request for all items
 router.get('/', (req, res, next) => {
@@ -14,7 +15,19 @@ router.get('/', (req, res, next) => {
             res.status(200).json({
                 status: 200,
                 Items: dataLength,
-                products: data
+                product: data.map(
+                    doc => {
+                        return {
+                            id: doc._id,
+                            name: doc.name,
+                            price: doc.price,
+                            request: {
+                                type: "GET BY ID",
+                                url: "http://localhost:3000/products/" + doc._id
+                            }
+                        }
+                    }
+                )
             })
         })
         .catch(

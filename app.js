@@ -19,6 +19,7 @@ mongoose.connect('mongodb+srv://optimus:' + process.env.MONGO_ATLAS_PWD + '@clus
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
 
+// Comment
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
 
+// Comment
 // Allow Access Control
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -37,7 +39,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// GESTION DES ERREURS
+// Comment
+// ERROR MANAGING
 app.use((req, res, next) => {
     const error = new Error('THE REQUEST WAS NOT FOUND ON THE SERVER');
     error.status = 404;
@@ -56,5 +59,3 @@ app.use((error, req, res, next) => {
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`THE SERVER IS RUNNING AT PORT ${port}`));
 
-// EXPORTS
-// module.exports = app;
