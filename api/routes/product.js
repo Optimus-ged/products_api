@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
                             name: doc.name,
                             price: doc.price,
                             request: {
-                                type: "GET BY ID",
+                                type: "GET",
                                 url: "http://localhost:3000/products/" + doc._id
                             }
                         }
@@ -98,7 +98,11 @@ router.post('/', (req, res, next) => {
                     createdProduct: {
                         _id: result._id,
                         name: result.name,
-                        price: result.price
+                        price: result.price,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3000/products/" + doc._id
+                        }
                     }
                 });
             })
