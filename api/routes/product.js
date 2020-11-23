@@ -59,7 +59,6 @@ router.get('/:id', (req, res, next) => {
                             url: "http://localhost:3000/products"
                         }
                     },
-
                 })
             res.status(404).json({
                 status: 404,
