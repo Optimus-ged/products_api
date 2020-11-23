@@ -50,12 +50,21 @@ router.get('/:id', (req, res, next) => {
     Product.findById(id)
         .select("_id name price")
         .exec()
-        .then(prod => {
-            if (prod)
+        .then(data => {
+            if (data)
                 return res.status(200).json({
                     status: 200,
                     message: "Success getted",
-                    product: prod
+                    product: {
+                        id: data._id,
+                        name: data.name,
+                        price: data.price,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3000/products"
+                        }
+                    }
+
                 })
 
             res.status(404).json({
@@ -101,7 +110,7 @@ router.post('/', (req, res, next) => {
                         price: result.price,
                         request: {
                             type: "GET",
-                            url: "http://localhost:3000/products/" + doc._id
+                            url: "http://localhost:3000/products/" + result._id
                         }
                     }
                 });
