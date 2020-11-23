@@ -55,18 +55,12 @@ router.get('/:id', (req, res, next) => {
                 return res.status(200).json({
                     status: 200,
                     message: "Success getted",
-                    product: {
-                        id: data._id,
-                        name: data.name,
-                        price: data.price,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:3000/products"
-                        }
+                    product: data,
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:3000/products"
                     }
-
                 })
-
             res.status(404).json({
                 status: 404,
                 message: "Product not found"
@@ -133,14 +127,17 @@ router.post('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     let id = req.params.id;
     Product.remove({ _id: id }).exec().then(result => {
-        if (result)
-            return res.status(200).json({
-                status: 200,
-                message: "Successfully Deleted"
-            })
-        res.status(404).json({
-            error: {
-                message: "Invalid product Id"
+        res.status(200).json({
+            status: 200,
+            message: "Successfully Deleted",
+            result: result,
+            request: {
+                type: "Post-request",
+                url: "http://localhost:3000/products",
+                body: {
+                    name: "STRING",
+                    price: "NUMBER"
+                }
             }
         })
     })
@@ -163,7 +160,7 @@ router.patch('/:id', (req, res) => {
     let id = req.params.id;
     const updateOps = {};
     for (const ops of req.body) {
-        updateOps[ops.OpsKey] = ops.value;
+        updateOps[ops.opsKey] = ops.value;
     }
     Product.updateOne({ _id: id }, { $set: updateOps })
         .exec()
@@ -179,6 +176,10 @@ router.patch('/:id', (req, res) => {
                 res.status(200).json({
                     status: 200,
                     message: "Product Success Updated",
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:3000/products/" + id
+                    }
                 });
             }
         )
