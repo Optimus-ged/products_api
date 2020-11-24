@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 // Comment
 // Import order-model
 const Order = require('../models/order');
-const Product = require('../models/product');
+const Product = require('../models/Product');
 
 
 // Comment
@@ -46,7 +46,7 @@ router.get('/', (req, res) => {
 // Comment
 // Handling Post-request
 router.post('/', (req, res) => {
-    Product.findOne(req.body.productId)
+    Product.findById(req.body.productId)
         .then(
             prod => {
                 if (!prod)
@@ -74,6 +74,7 @@ router.post('/', (req, res) => {
                 )
             }
         )
+
         .catch(
             err => {
                 errorFunction(res, err);
@@ -99,8 +100,11 @@ router.delete('/:id', (req, res, next) => {
 function errorFunction(res, err) {
     console.log(err);
     res.status(500).json({
-        status: 500,
-        message: err.message
+        error: {
+            status: 500,
+            message: err.message
+        }
+
     });
 }
 
