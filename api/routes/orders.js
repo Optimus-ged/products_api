@@ -27,14 +27,25 @@ router.post('/', (req, res) => {
             result => {
                 console.log(result);
                 res.status(200).json({
+                    status: 200,
                     message: "data successfully posted",
-                    result: result
+                    result: {
+                        id: results._id,
+                        product: result.product,
+                        quantity: result.quantity
+                    }
                 });
             }
         )
         .catch(
             err => {
-                errorFunction(err, res);
+                console.log(err);
+                res.status(500).json({
+                    status: 500,
+                    error: {
+                        message: err.message
+                    }
+                });
             }
         );
 });
