@@ -85,10 +85,30 @@ router.post('/', (req, res) => {
 });
 
 
-router.get('/:id', (req, res, next) => {
-    res.status(200).json({
-        message: 'Order details'
-    });
+// Comment
+// Handling get-request for one product
+router.get('/:id', (req, res) => {
+    Order.findById(req.params.id)
+        .select('_id product quantity')
+        .exec()
+        .then(
+            result => {
+                res.status(200).json({
+                    status: 200,
+                    message: "Product successfully getted",
+                    product: result,
+                    request: {
+                        type: "Get-request",
+                        url: "http://localhost:3000/orders"
+                    }
+                });
+            }
+        )
+        .catch(
+            err => {
+                errorFunction(res, err);
+            }
+        );
 });
 
 router.delete('/:id', (req, res, next) => {
