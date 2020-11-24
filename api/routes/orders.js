@@ -8,10 +8,38 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling get Orders'
-    });
+// Comment
+// Handling get-request
+router.get('/', (req, res) => {
+    Order.find()
+        .select('_id product quantity')
+        .exec()
+        .then(
+            data => {
+                res.status(200).json({
+                    message: "data Successfully getted",
+                    status: 200,
+                    all_product: data.map(
+                        order => {
+                            return {
+                                id: order._id,
+                                product: order.product,
+                                quantity: order.quantity,
+                                request: {
+                                    type: "Get-request",
+                                    ulr: "http://localhost:3000/orders"
+                                }
+                            }
+                        }
+                    )
+                });
+            }
+        )
+        .catch(
+            err => {
+                errorFunction(res, err);
+            }
+        )
 });
 
 // Comment
@@ -30,7 +58,7 @@ router.post('/', (req, res) => {
                     status: 200,
                     message: "data successfully posted",
                     result: {
-                        id: results._id,
+                        id: result._id,
                         product: result.product,
                         quantity: result.quantity
                     }
@@ -39,13 +67,7 @@ router.post('/', (req, res) => {
         )
         .catch(
             err => {
-                console.log(err);
-                res.status(500).json({
-                    status: 500,
-                    error: {
-                        message: err.message
-                    }
-                });
+                errorFunction(res, err)
             }
         );
 });
