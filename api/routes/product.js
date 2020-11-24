@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+
+// Comment
+// Imports models
 const Product = require('../models/Product');
 
 // Comment
@@ -182,6 +185,7 @@ router.patch('/:id', (req, res) => {
 function errorFunction(err, res) {
     console.log(err);
     res.status(500).json({
+        status: 500,
         error: {
             message: err.message
         }

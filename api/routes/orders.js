@@ -1,5 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+
+// Comment
+// Import order-model
+const Order = require('../models/order');
+
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -7,16 +14,29 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
-    const order = {
-        productId: req.body.productId,
+// Comment
+// Handling post-request
+router.post('/', (req, res) => {
+    let order = new Order({
+        _id: mongoose.Types.ObjectId(),
+        product: req.body.productId,
         quantity: req.body.quantity
-    };
-    res.status(201).json({
-        status: '201',
-        message: 'Handling post Orders',
-        order: order
     });
+    order.save()
+        .then(
+            result => {
+                console.log(result);
+                res.status(200).json({
+                    message: "data successfully posted",
+                    result: result
+                });
+            }
+        )
+        .catch(
+            err => {
+                errorFunction(err, res);
+            }
+        );
 });
 
 router.get('/:id', (req, res, next) => {
@@ -32,4 +52,17 @@ router.delete('/:id', (req, res, next) => {
     });
 });
 
+// Comment
+// Error function for try-catch
+function errorFunction(res, err) {
+    console.log(err);
+    res.status(500).json({
+        status: 500,
+        message: err.message
+    });
+}
+
+
+// Comment
+// Export module
 module.exports = router;
