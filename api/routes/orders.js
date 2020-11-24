@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 // Comment
 // Import order-model
 const Order = require('../models/order');
+const product = require('../models/Product');
 const Product = require('../models/Product');
 
 
@@ -44,15 +45,17 @@ router.get('/', (req, res) => {
 });
 
 // Comment
-// Handling Post-request
+// Handling post-request
 router.post('/', (req, res) => {
     Product.findById(req.body.productId)
         .then(
-            prod => {
-                if (!prod)
-                    res.status(404).json({
-                        status: 404,
-                        message: "Invalid productId"
+            result => {
+                if (!result)
+                    return res.status(404).json({
+                        error: {
+                            status: 404,
+                            message: "Product not found"
+                        }
                     });
                 let order = new Order({
                     _id: mongoose.Types.ObjectId(),
@@ -62,24 +65,20 @@ router.post('/', (req, res) => {
                 return order.save().then(
                     result => {
                         res.status(201).json({
-                            status: 201,
-                            message: "Data successfully Stored",
-                            oredrStored: {
-                                id: result._id,
-                                product: result.productId,
-                                quantity: result.quantity
-                            }
+                            message: "Order successfully stored",
+                            id: result.id,
+                            product: result.product,
+                            quantity: result.quantity
                         });
                     }
-                )
+                );
             }
         )
-
         .catch(
             err => {
                 errorFunction(res, err);
             }
-        )
+        );
 });
 
 router.get('/:id', (req, res, next) => {
