@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
                     return res.status(404).json({
                         error: {
                             status: 404,
-                            message: "Product not found"
+                            message: "Invalid product Id"
                         }
                     });
                 let order = new Order({
@@ -65,10 +65,13 @@ router.post('/', (req, res) => {
                 return order.save().then(
                     result => {
                         res.status(201).json({
-                            message: "Order successfully stored",
-                            id: result.id,
-                            product: result.product,
-                            quantity: result.quantity
+                            status: 201,
+                            message: "Successfully stored",
+                            product_stored: {
+                                _id: result._id,
+                                product: result.product,
+                                quantity: result.quantity
+                            }
                         });
                     }
                 );
@@ -78,8 +81,9 @@ router.post('/', (req, res) => {
             err => {
                 errorFunction(res, err);
             }
-        );
+        )
 });
+
 
 router.get('/:id', (req, res, next) => {
     res.status(200).json({
