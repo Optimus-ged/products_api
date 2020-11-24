@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-
 // Comment
 // Import order-model
 const Order = require('../models/order');
+const Product = require('../models/product');
 
 
 // Comment
@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
                 res.status(200).json({
                     message: "data Successfully getted",
                     status: 200,
+                    count: data.length,
                     all_product: data.map(
                         order => {
                             return {
@@ -27,7 +28,7 @@ router.get('/', (req, res) => {
                                 quantity: order.quantity,
                                 request: {
                                     type: "Get-request",
-                                    ulr: "http://localhost:3000/orders"
+                                    ulr: "http://localhost:3000/orders" + order._id
                                 }
                             }
                         }
@@ -43,33 +44,41 @@ router.get('/', (req, res) => {
 });
 
 // Comment
-// Handling post-request
+// Handling Post-request
 router.post('/', (req, res) => {
-    let order = new Order({
-        _id: mongoose.Types.ObjectId(),
-        product: req.body.productId,
-        quantity: req.body.quantity
-    });
-    order.save()
+    Product.findOne(req.body.productId)
         .then(
-            result => {
-                console.log(result);
-                res.status(200).json({
-                    status: 200,
-                    message: "data successfully posted",
-                    result: {
-                        id: result._id,
-                        product: result.product,
-                        quantity: result.quantity
-                    }
+            prod => {
+                if (!prod)
+                    res.status(404).json({
+                        status: 404,
+                        message: "Invalid productId"
+                    });
+                let order = new Order({
+                    _id: mongoose.Types.ObjectId(),
+                    product: req.body.productId,
+                    quantity: req.body.quantity
                 });
+                return order.save().then(
+                    result => {
+                        res.status(201).json({
+                            status: 201,
+                            message: "Data successfully Stored",
+                            oredrStored: {
+                                id: result._id,
+                                product: result.productId,
+                                quantity: result.quantity
+                            }
+                        });
+                    }
+                )
             }
         )
         .catch(
             err => {
-                errorFunction(res, err)
+                errorFunction(res, err);
             }
-        );
+        )
 });
 
 router.get('/:id', (req, res, next) => {
