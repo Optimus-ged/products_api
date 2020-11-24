@@ -93,6 +93,13 @@ router.get('/:id', (req, res) => {
         .exec()
         .then(
             result => {
+                if (!result)
+                    return res.status(404).json({
+                        error: {
+                            status: 404,
+                            message: "Invalid product Id"
+                        }
+                    });
                 res.status(200).json({
                     status: 200,
                     message: "Product successfully getted",
@@ -111,12 +118,33 @@ router.get('/:id', (req, res) => {
         );
 });
 
-router.delete('/:id', (req, res, next) => {
-    res.status(200).json({
-        message: 'deleting ordres by id',
-        id: req.params.id
-    });
+
+// Comment
+// Handling delete-request
+router.delete('/:id', (req, res) => {
+    Order.deleteOne({ _id: req.params.id }).exec().then(
+        result => {
+            if (result.n == 0)
+                return res.status(404).json({
+                    error: {
+                        status: 404,
+                        message: "Product id Not exist"
+                    }
+                });
+            return res.status(201).json({
+                status: 201,
+                result: result,
+                message: "Product successfully deleted"
+            });
+        }
+    )
+        .catch(
+            err => {
+                errorFunction(res, err);
+            }
+        )
 });
+
 
 // Comment
 // Error function for try-catch
