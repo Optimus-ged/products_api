@@ -1,23 +1,26 @@
+// Comment
+// Import Depandancies
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const multer = require('multer');
 
+// Comment
+// Definition of the storage : destination and fileName
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads');
-        console.log(file);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
-        console.log(file);
     }
-
 });
 
+// Comment
+// with this constant i will be able to upload the image
+// using my post-request 
 const upload = multer({ storage: storage });
 
-// const upload = multer({ dest: './uploads' });
 
 
 // Comment
