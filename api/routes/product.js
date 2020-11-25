@@ -6,12 +6,26 @@ const router = express.Router();
 const multer = require('multer');
 
 // Comment
+// function to filter my images, accept or reject some images
+// extensions
+const fileFilter = (req, file, cb) => {
+    // Comment
+    // Reject
+    if (file.mimetype != '/image/jpeg' || file.mimetype != 'image/png')
+        return cb(null, false);
+
+    // Comment
+    // Accept
+    cb(null, true);
+}
+
+// Comment
 // Definition of the storage : destination and fileName
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: (req, file, cb) => {
         cb(null, './uploads');
     },
-    filename: function (req, file, cb) {
+    filename: (req, file, cb) => {
         cb(null, file.originalname);
     }
 });
@@ -19,7 +33,13 @@ const storage = multer.diskStorage({
 // Comment
 // with this constant i will be able to upload the image
 // using my post-request 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+});
 
 
 
