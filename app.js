@@ -26,6 +26,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
+app.use('/uploads', express.static('uploads'));
 
 // Comment
 // Allow Access Control
