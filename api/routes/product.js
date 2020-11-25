@@ -6,7 +6,6 @@ const router = express.Router();
 const multer = require('multer');
 
 
-
 // Comment
 // function to filter my images, accept or reject some images
 // extensions

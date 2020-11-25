@@ -2,7 +2,6 @@
 // Import Dependance
 const mongoose = require('mongoose');
 
-
 // Comment
 // Product model
 const productSchema = mongoose.Schema({

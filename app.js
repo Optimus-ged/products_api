@@ -7,7 +7,6 @@ const app = express();
 const mongoose = require('mongoose');
 
 
-
 // Comment
 // Connection to Db
 mongoose.connect('mongodb+srv://optimus:' + process.env.MONGO_ATLAS_PWD + '@cluster0.hefqw.mongodb.net/productsDb?retryWrites=true&w=majority',
