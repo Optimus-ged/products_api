@@ -5,18 +5,23 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const multer = require('multer');
 
+
+
 // Comment
 // function to filter my images, accept or reject some images
 // extensions
-const fileFilter = (req, file, cb) => {
+const _fileFilter = (req, file, cb) => {
     // Comment
     // Reject
-    if (file.mimetype != '/image/jpeg' || file.mimetype != 'image/png')
-        return cb(null, false);
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        // Comment
+        // Accept
+        cb(null, false);
+    }
 
-    // Comment
-    // Accept
-    cb(null, true);
+
 }
 
 // Comment
@@ -35,11 +40,13 @@ const storage = multer.diskStorage({
 // using my post-request 
 const upload = multer({
     storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 5
-    },
-    fileFilter: fileFilter
+    // limits: {
+    //     fileSize: 1024 * 1024 * 5
+    // },
+    // fileFilter: _fileFilter
 });
+
+// const upload = multer({ dest: 'uploads/' });
 
 
 
@@ -121,6 +128,7 @@ router.get('/:id', (req, res) => {
 // Comment
 // Handling post-request
 router.post('/', upload.single('productImage'), (req, res) => {
+    console.log(req.file);
     const product = new Product({
         _id: mongoose.Types.ObjectId(),
         name: req.body.name,
