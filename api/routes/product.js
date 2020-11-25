@@ -4,13 +4,14 @@ const router = express.Router();
 
 // Comment
 // Imports models
-const Product = require('../models/Product');
+const Product = require('../models/product');
 
 // Comment
 // Handling get-request for all items
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
     Product.find()
         .select("_id name price")
+        .populate("product")
         .exec()
         .then(data => {
             let dataLength = data.length
@@ -42,7 +43,7 @@ router.get('/', (req, res, next) => {
 
 // comment
 // Handling get-equest for one item
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res) => {
     let id = req.params.id;
     Product.findById(id)
         .select("_id name price")
@@ -79,9 +80,9 @@ router.get('/:id', (req, res, next) => {
 
 // Comment
 // Handling post-request
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
     const product = new Product({
-        _id:  mongoose.Types.ObjectId(),
+        _id: mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price
     });
@@ -113,7 +114,7 @@ router.post('/', (req, res, next) => {
 
 // Comment
 // Handling delete-request
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', (req, res) => {
     let id = req.params.id;
     Product.deleteOne({ _id: id }).exec().then(
         result => {
@@ -165,7 +166,7 @@ router.patch('/:id', (req, res) => {
                     })
                 res.status(200).json({
                     status: 200,
-                    message: "Product Success Updated",
+                    message: "Product Sucscess Updated",
                     request: {
                         type: "GET",
                         url: "http://localhost:3000/products/" + id

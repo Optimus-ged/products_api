@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // Order model
 const orderSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'product', required: true },
     quantity: { type: Number, default: 1 }
 });
 

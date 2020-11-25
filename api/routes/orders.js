@@ -5,8 +5,7 @@ const mongoose = require('mongoose');
 // Comment
 // Import order-model
 const Order = require('../models/order');
-const product = require('../models/Product');
-const Product = require('../models/Product');
+const Product = require('../models/product');
 
 
 // Comment
@@ -14,6 +13,7 @@ const Product = require('../models/Product');
 router.get('/', (req, res) => {
     Order.find()
         .select('_id product quantity')
+        .populate("product", "_id name price")
         .exec()
         .then(
             data => {
@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
                                 quantity: order.quantity,
                                 request: {
                                     type: "Get-request",
-                                    ulr: "http://localhost:3000/orders" + order._id
+                                    ulr: "http://localhost:3000/orders/" + order._id
                                 }
                             }
                         }
@@ -133,8 +133,7 @@ router.delete('/:id', (req, res) => {
                 });
             return res.status(201).json({
                 status: 201,
-                result: result,
-                message: "Product successfully deleted"
+                message: "Order successfully deleted"
             });
         }
     )
