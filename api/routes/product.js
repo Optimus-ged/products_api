@@ -10,7 +10,7 @@ const multer = require('multer');
 // Comment
 // function to filter my images, accept or reject some images
 // extensions
-const _fileFilter = (req, file, cb) => {
+const fileFilter = (req, file, cb) => {
     // Comment
     // Reject
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -40,15 +40,11 @@ const storage = multer.diskStorage({
 // using my post-request 
 const upload = multer({
     storage: storage,
-    // limits: {
-    //     fileSize: 1024 * 1024 * 5
-    // },
-    // fileFilter: _fileFilter
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
 });
-
-// const upload = multer({ dest: 'uploads/' });
-
-
 
 // Comment
 // Imports models
@@ -58,7 +54,7 @@ const Product = require('../models/product');
 // Handling get-request for all items
 router.get('/', (req, res) => {
     Product.find()
-        .select("_id name price")
+        .select("_id name price productImage")
         .exec()
         .then(data => {
             let dataLength = data.length
@@ -71,6 +67,7 @@ router.get('/', (req, res) => {
                             id: doc._id,
                             name: doc.name,
                             price: doc.price,
+                            productImage: doc.productImage,
                             request: {
                                 type: "GET BY ID",
                                 url: "http://localhost:3000/products/" + doc._id
@@ -93,7 +90,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     let id = req.params.id;
     Product.findById(id)
-        .select("_id name price")
+        .select("_id name price productImage")
         .exec()
         .then(data => {
             if (data)
@@ -104,6 +101,7 @@ router.get('/:id', (req, res) => {
                         id: data._id,
                         name: data.name,
                         price: data.price,
+                        productImage: data.productImage,
                         request: {
                             type: "GET",
                             description: "Get all products",
@@ -132,7 +130,8 @@ router.post('/', upload.single('productImage'), (req, res) => {
     const product = new Product({
         _id: mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        productImage: req.file.path
     });
     product
         .save()
