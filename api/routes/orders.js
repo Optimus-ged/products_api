@@ -90,6 +90,7 @@ router.post('/', (req, res) => {
 router.get('/:id', (req, res) => {
     Order.findById(req.params.id)
         .select('_id product quantity')
+        .populate('product', '_id name price')
         .exec()
         .then(
             result => {
@@ -97,7 +98,7 @@ router.get('/:id', (req, res) => {
                     return res.status(404).json({
                         error: {
                             status: 404,
-                            message: "Invalid product Id"
+                            message: "Invalid Order Id"
                         }
                     });
                 res.status(200).json({
