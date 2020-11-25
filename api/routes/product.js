@@ -1,6 +1,24 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads');
+        console.log(file);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+        console.log(file);
+    }
+
+});
+
+const upload = multer({ storage: storage });
+
+// const upload = multer({ dest: './uploads' });
+
 
 // Comment
 // Imports models
@@ -11,7 +29,6 @@ const Product = require('../models/product');
 router.get('/', (req, res) => {
     Product.find()
         .select("_id name price")
-        .populate("product")
         .exec()
         .then(data => {
             let dataLength = data.length
@@ -80,7 +97,7 @@ router.get('/:id', (req, res) => {
 
 // Comment
 // Handling post-request
-router.post('/', (req, res) => {
+router.post('/', upload.single('productImage'), (req, res) => {
     const product = new Product({
         _id: mongoose.Types.ObjectId(),
         name: req.body.name,

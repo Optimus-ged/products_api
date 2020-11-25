@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+
+
 // Comment
 // Import order-model
 const Order = require('../models/order');
@@ -47,6 +49,7 @@ router.get('/', (req, res) => {
 // Comment
 // Handling post-request
 router.post('/', (req, res) => {
+    console.log(req.file);
     Product.findById(req.body.productId)
         .then(
             result => {
