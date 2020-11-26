@@ -12,7 +12,7 @@ const Product = require('../models/product');
 
 // Comment
 // Handling get-request
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     Order.find()
         .select('_id product quantity')
         .populate("product", "_id name price")
@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
 
 // Comment
 // Handling post-request
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     console.log(req.file);
     Product.findById(req.body.productId)
         .then(
@@ -90,7 +90,7 @@ router.post('/', (req, res) => {
 
 // Comment
 // Handling get-request for one product
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
     Order.findById(req.params.id)
         .select('_id product quantity')
         .populate('product', '_id name price')
@@ -125,7 +125,7 @@ router.get('/:id', (req, res) => {
 
 // Comment
 // Handling delete-request
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
     Order.deleteOne({ _id: req.params.id }).exec().then(
         result => {
             if (result.n == 0)

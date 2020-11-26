@@ -9,8 +9,13 @@ const mongoose = require('mongoose');
 
 // Comment
 // Connection to Db
+// mongoose.set('useCreateIndex', true)
 mongoose.connect('mongodb+srv://optimus:' + process.env.MONGO_ATLAS_PWD + '@cluster0.hefqw.mongodb.net/productsDb?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    }
 );
 mongoose.Promise = global.Promise;
 // Comment
@@ -26,7 +31,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 app.use('/uploads', express.static('uploads'));
 
 // Comment
