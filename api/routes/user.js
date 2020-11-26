@@ -9,6 +9,30 @@ const bcrypt = require('bcrypt');
 // Import User model
 const User = require('../models/user');
 
+
+// Comment
+// Handling get-request for all users
+router.get('/', (req, res, next) => {
+    User.find()
+        .select('_id email password')
+        .exec()
+        .then(
+            result => {
+                res.status(200).json({
+                    status: 200,
+                    message : 'User successfuly getted',
+                    count: result.length,
+                    Users: result
+                });
+            }
+        )
+        .catch(
+            err => {
+                errorFunction(err, res)
+            }
+        );
+});
+
 // Comment
 // Handling post-request
 router.post('/signup', (req, res, next) => {
@@ -44,8 +68,8 @@ router.post('/signup', (req, res, next) => {
                                     status: 200,
                                     message: 'User Successfully created',
                                     result: {
-                                        email : result.email,
-                                        password : result.password
+                                        email: result.email,
+                                        password: result.password
                                     }
                                 })
                             }
@@ -59,6 +83,8 @@ router.post('/signup', (req, res, next) => {
             }
         )
 });
+
+
 
 
 // Comment
