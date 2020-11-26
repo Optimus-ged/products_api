@@ -46,15 +46,16 @@ app.use((req, res, next) => {
     next();
 });
 
+
 // Comment
-// ERROR MANAGING
+// Handling errors
 app.use((req, res, next) => {
-    const error = new Error('THE REQUEST WAS NOT FOUND ON THE SERVER');
-    error.status = 404;
+    const error = new Error('Not found on the server');
+    res.status(404);
     next(error);
 });
 
-app.use((error, req, res) => {
+app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
         error: {

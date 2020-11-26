@@ -89,10 +89,13 @@ router.post('/signup', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     User.deleteOne({ _id: req.params.id }).exec()
         .then(
-            res.status(200).json({
-                status: 200,
-                message: 'User successfully deleted'
-            })
+            result => {
+                console.log(result);
+                res.status(200).json({
+                    status: 200,
+                    message: 'User successfully deleted'
+                })
+            }
         )
         .catch(
             err => {
