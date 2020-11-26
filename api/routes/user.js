@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Comment
 // Import User model
@@ -80,6 +81,49 @@ router.post('/signup', (req, res, next) => {
                             }
                         );
                 });
+            }
+        )
+});
+
+// Comment
+// Handling user authentification
+router.post('/login', (req, res) => {
+    User.findOne({ email: req.body.email }).exec()
+        .then(
+            result => {
+                if (!result) {
+                    console.log(result);
+                    res.status(401).json({
+                        status: 401,
+                        message: 'Authentification failed'
+                    });
+                }
+
+                if (result)
+                    return bcrypt.compare(req.body.password, result.password, (error, comparisonOk) => {
+                        if (error) 
+                            return res.status(401).json({
+                                status: 401,
+                                message: 'Authentification failed'
+                            });
+                        
+                        if (!comparisonOk) {
+                            res.status(409).json({
+                                status: 401,
+                                message: 'Authentification failed, Please check your email and password'
+                            });
+                        } else {
+                            res.status(201).json({
+                                status: 201,
+                                message: 'Authentification Ok !!!'
+                            });
+                        }
+                    });
+            }
+        )
+        .catch(
+            err => {
+                errorFunction(res, err);
             }
         )
 });

@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 // Comment
 // Handling errors
 app.use((req, res, next) => {
-    const error = new Error('Not found on the server');
+    const error = new Error('THE RESSOURCE WAS NOT FOUND ON THE SERVER');
     res.status(404);
     next(error);
 });
