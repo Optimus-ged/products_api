@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
             result => {
                 res.status(200).json({
                     status: 200,
-                    message : 'User successfuly getted',
+                    message: 'User successfuly getted',
                     count: result.length,
                     Users: result
                 });
@@ -84,7 +84,22 @@ router.post('/signup', (req, res, next) => {
         )
 });
 
-
+// comment
+// Handling delete-request
+router.delete('/:id', (req, res, next) => {
+    User.deleteOne({ _id: req.params.id }).exec()
+        .then(
+            res.status(200).json({
+                status: 200,
+                message: 'User successfully deleted'
+            })
+        )
+        .catch(
+            err => {
+                errorFunction(res, err);
+            }
+        );
+});
 
 
 // Comment
