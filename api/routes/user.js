@@ -101,21 +101,27 @@ router.post('/login', (req, res) => {
 
                 if (result)
                     return bcrypt.compare(req.body.password, result.password, (error, comparisonOk) => {
-                        if (error) 
+                        if (error)
                             return res.status(401).json({
                                 status: 401,
                                 message: 'Authentification failed'
                             });
-                        
+
                         if (!comparisonOk) {
                             res.status(409).json({
                                 status: 401,
                                 message: 'Authentification failed, Please check your email and password'
                             });
                         } else {
+                            const token = jwt.sign(
+                                { email: result.email, id: result._id },
+                                process.env.jwt_KEY,
+                                { expiresIn: '1h' }
+                            );
                             res.status(201).json({
                                 status: 201,
-                                message: 'Authentification Ok !!!'
+                                message: 'Authentification Sucess !!!',
+                                token: token
                             });
                         }
                     });
