@@ -17,6 +17,7 @@ mongoose.Promise = global.Promise;
 // IMPORTS ROUTES
 const productsRoutes = require('./api/routes/product');
 const ordersRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
 
 // Comment
 // MIDDLEWARE
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
+app.use('/user', userRoutes);
 app.use('/uploads', express.static('uploads'));
 
 // Comment
