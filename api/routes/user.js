@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const checkAth = require('../middleware/check_auth')
 
 // Comment
 // Import User model
@@ -13,7 +14,7 @@ const User = require('../models/user');
 
 // Comment
 // Handling get-request for all users
-router.get('/', (req, res, next) => {
+router.get('/', checkAth, (req, res, next) => {
     User.find()
         .select('_id email password')
         .exec()
@@ -36,7 +37,7 @@ router.get('/', (req, res, next) => {
 
 // Comment
 // Handling post-request
-router.post('/signup', (req, res, next) => {
+router.post('/signup', checkAth, (req, res, next) => {
     User.find({ email: req.body.email }).exec()
         .then(
             result => {
@@ -98,7 +99,6 @@ router.post('/login', (req, res) => {
                         message: 'Authentification failed'
                     });
                 }
-
                 if (result)
                     return bcrypt.compare(req.body.password, result.password, (error, comparisonOk) => {
                         if (error)
@@ -115,7 +115,7 @@ router.post('/login', (req, res) => {
                         } else {
                             const token = jwt.sign(
                                 { email: result.email, id: result._id },
-                                process.env.jwt_KEY,
+                                process.env.JWT_KEY,
                                 { expiresIn: '1h' }
                             );
                             res.status(201).json({
@@ -136,7 +136,7 @@ router.post('/login', (req, res) => {
 
 // comment
 // Handling delete-request
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAth, (req, res, next) => {
     User.deleteOne({ _id: req.params.id }).exec()
         .then(
             result => {

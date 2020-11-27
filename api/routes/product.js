@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const multer = require('multer');
+const checkAuth = require('../middleware/check_auth');
 
 
 // Comment
@@ -50,7 +51,7 @@ const Product = require('../models/product');
 
 // Comment
 // Handling get-request for all items
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     Product.find()
         .select("_id name price productImage")
         .exec()
@@ -85,7 +86,7 @@ router.get('/', (req, res, next) => {
 
 // comment
 // Handling get-equest for one item
-router.get('/:id', (req, res, next) => {
+router.get('/:id', checkAuth, (req, res, next) => {
     let id = req.params.id;
     Product.findById(id)
         .select("_id name price productImage")
@@ -123,7 +124,7 @@ router.get('/:id', (req, res, next) => {
 
 // Comment
 // Handling post-request
-router.post('/', upload.single('productImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
     console.log(req.file);
     const product = new Product({
         _id: mongoose.Types.ObjectId(),
@@ -159,7 +160,7 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
 
 // Comment
 // Handling delete-request
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
     let id = req.params.id;
     Product.deleteOne({ _id: id }).exec().then(
         result => {
@@ -192,7 +193,7 @@ router.delete('/:id', (req, res, next) => {
 
 // Comment
 // Handling patch-request
-router.patch('/:id', (req, res, next) => {
+router.patch('/:id', checkAuth, (req, res, next) => {
     let id = req.params.id;
     const updateOps = {};
     for (const ops of req.body) {
