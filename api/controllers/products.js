@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Product = require('../models/product');
 
+
 // Comment
 // Handling get-request for all items
 exports.products_get_all = (req, res, next) => {
