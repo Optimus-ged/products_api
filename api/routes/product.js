@@ -4,21 +4,17 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const checkAuth = require('../middleware/check_auth');
-
 const productController = require('../controllers/products');
 
 
 // Comment
 // function to filter my images, accept or reject some images
 // extensions
+// cb => means call back function
 const fileFilter = (req, file, cb) => {
-    // Comment
-    // Reject
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
         cb(null, true);
     } else {
-        // Comment
-        // Accept
         cb(null, false);
     }
 

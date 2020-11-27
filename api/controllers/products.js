@@ -1,3 +1,5 @@
+// Comments
+// Import Dependancies
 const mongoose = require('mongoose');
 const Product = require('../models/product');
 
@@ -8,7 +10,7 @@ exports.products_get_all = (req, res, next) => {
         .select("_id name price productImage")
         .exec()
         .then(data => {
-            let dataLength = data.length
+            let dataLength = data.lengthz
             res.status(200).json({
                 status: 200,
                 Items: dataLength,
@@ -90,7 +92,7 @@ exports.product_create = (req, res, next) => {
                 console.log(result);
                 res.status(200).json({
                     status: 200,
-                    message: 'Handling a post request',
+                    message: 'Product successfully created',
                     createdProduct: {
                         _id: result._id,
                         name: result.name,
